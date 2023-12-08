@@ -1,6 +1,0 @@
-function mean_diam_g = meandiamg(vals, weights)
-    mean_diam_g = exp( ...
-                        sum(log(vals).*weights)./sum(weights) ...
-                      );
-end
-
