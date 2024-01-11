@@ -4,7 +4,7 @@ Rsquare = TandRsquare(end);
 r = sqrt(Rsquare);
 noTemperatures = length(TandRsquare) - 1;
 
-if r < 1e-9 % terminate simulation at droplet size limit
+if r < 1e-7 % terminate simulation at droplet size limit
     dTdt(1:noTemperatures) = 0;
     dr2dt = 0;
     Y = [dTdt'; dr2dt];   

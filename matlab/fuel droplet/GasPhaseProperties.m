@@ -16,15 +16,13 @@ classdef GasPhaseProperties
     
     methods
         function obj = GasPhaseProperties()
-           obj.T_inf = 1600;
+           obj.T_inf = 1600; %K
            obj.p_inf = 1;
            obj.Y_0inf = 0.232;
-           obj.M_air = 0.02897; %air
-           %obj.M_air = 0.028; %nitrogen
+           obj.M_air = 0.02897; %air, kg/mole
            obj.lambda_heat = 0.02638; %at 300K and 1 bar for air
-           %obj.lambda_heat = 0.02597; %at 300K and 1 bar for nitrogen
-           obj.C_g = 1465.379998; %J/kg/K
-           obj.Cg_Law = 0.35; %cal/gm/K
+           obj.C_g = 1465.379998; %J/kg/K, not normalized
+           obj.Cg_Law = 0.35; %cal/gm/K, normalized according to C.K. Law
         end    
     end
 end

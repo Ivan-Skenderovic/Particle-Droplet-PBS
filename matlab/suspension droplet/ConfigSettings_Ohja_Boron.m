@@ -6,9 +6,9 @@ NOSTEPS = 1e5;
 
 TIMESTEP = 1e-3; %s
 
-ODEINT_ABS_ERROR = 1e-9;
+ODEINT_ABS_ERROR = 1;
 
-ODEINT_REL_ERROR = 1e-9;
+ODEINT_REL_ERROR = 1e-6;
 
 PRECURSOR_CONCENTRATION = 0.0; % mol/m³
 
@@ -37,8 +37,5 @@ PARTICLE_DENSITY = 2460; %kg/m³, boron particles with oxide shell
 VOLFRAC_CRIT = 0.64; % 
 
 NONODES = 80; % number of pivot points for Prakash method
-
-NO_FDGRIDPOINTS = 100; % number of grid points for the finite difference
-% discretization
 
 GRID_SPACING_FACTOR = 15; % grid scaling for Prakash method
