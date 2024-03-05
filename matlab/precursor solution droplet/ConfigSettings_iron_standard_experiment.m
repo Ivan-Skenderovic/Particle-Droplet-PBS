@@ -1,70 +1,54 @@
 
 NA = 6.02214086e23; % 1/mol, Avogadro constant
 
-KB = 1.380649e-23; %J/K, Boltzmann constant
+KB = 1.380649e-23; % J/K, Boltzmann constant
 
-NOSTEPS = 1e6;
+TIMESTEP = 1e-7; % s
 
-TIMESTEP = 1e-6; %s
+TIME_END = 1e-3; % s
 
-ODEINT_ABS_ERROR = 1;
+NOSPATIALGRIDPOINTS = 100; % no of discrete space nodes in finite difference
+% calculations
 
-ODEINT_REL_ERROR = 1e-6;
+MASS_CONSERVATION_ERROR = 1e-10; % very large particles might "flow" out of 
+% the volume grid set by the pivot method
 
-PRECURSOR_CONCENTRATION = 50; % mol/m³
+ODEINT_ABS_ERROR_HEATING = 1e-6;
 
-PARTICLE_INITIAL_MASS_FRACTION = 0.0; % dimensionless
+ODEINT_REL_ERROR_HEATING = 1e-3;
 
-PARTICLE_INITIAL_DIAMETER = 0.0; % m
+ODEINT_ABS_ERROR_COAGULATION = 1e-2;
 
-INIT_LOGN = 0;
+ODEINT_REL_ERROR_COAGULATION = 1e-6;
 
-DROPLET_DIAMETER = 18e-6; %m
+PRECURSOR_CONCENTRATION = 500; % mol/m³
 
-DROPLET_VOLUME_CUTOFF = 1; 
+DROPLET_DIAMETER = 9e-6; %m
 
-DROPLET_TEMPERATURE = 501.2; % K, boiling point of 2-EHA
+DROPLET_INITIAL_TEMPERATURE = 300; % K
 
-K = 2.0e-6;% droplet surface regression rate, m²/s
+DROPLET_CONCENTRATION = 1e10; % #/m³,  the spray is approximated by a 
+% monodisperse droplet population
 
-REACTION_RATE = 1e10;
+REACTION_RATE = 1e10; % 1/s
 
-DYN_VISC = 7.8e-3; % dynamic viscosity of solvent, Pa*s
+REACTION_RATE_FLAME = 1e10; % 1/s
 
-SOLV_DENSITY = 910; %kg/m³, 2-EHA
+TEMPERATURE_FLAME = 2300; % K
 
-RELATIVE_PERMITTIVITY = 58.5; % relative permittivity of solvent (here formic acid as substitute)
+PARTICLE_MOLAR_MASS = 0.10687; % kg/mol, fe(OH)3
 
-SHELL_SCALEFACTOR = 1; % monolayers required to build a stable particle shell
+PARTICLE_DENSITY = 3320; % kg/m³, fe(OH)3, bernalite
 
-%PARTICLE_MOLAR_MASS = 0.159687; %kg/mol, fe2O3
+PARTICLE_DENSITY_GAS_PHASE = 4860; % kg/m³, fe2O3, maghemite
 
-%PARTICLE_MOLAR_MASS = 0.071844; %kg/mol, feO
+TEMPERATURE_CRIT = 417.15; % K, boiling point of decomposition product
 
-%PARTICLE_MOLAR_MASS = 0.08885; %kg/mol, feO-OH
+VOLFRAC_CRIT_SURF = 0.1625; % Peclet number is >> 1 for droplet surface
 
-PARTICLE_MOLAR_MASS = 0.08986; %kg/mol, fe(OH)2
+VOLFRAC_CRIT_CORE = 0.035; % Peclet number is 0 for droplet core
 
-%PARTICLE_MOLAR_MASS = 0.10687; %kg/mol, fe(OH)3
-
-%PARTICLE_DENSITY = 4860; %kg/m³, maghemite
-
-%PARTICLE_DENSITY = 5740; %kg/m³, FeO
-
-%PARTICLE_DENSITY = 7874; %kg/m³, Fe
-
-%PARTICLE_DENSITY = 4250; %kg/m³, FeO-OH
-
-%PARTICLE_DENSITY = 3400; %kg/m³, Fe(OH)2
-
-PARTICLE_DENSITY = 3320; %kg/m³,  fe(OH)3
-
-PARTICLE_OXYGEN_STOCHIOMETRY = 1;
-
-VOLFRAC_CRIT = 0; % depends on fractal dimension of particles
-
-BIMODAL_SPHERE_PACKING = 1; %volume fraction achieved by bimodal psd, set to 1 if unused
-
-NONODES = 80; % number of nodes for Prakash method
+NONODES = 320; % number of nodes for Prakash method, set to 80 if 
+% computation time is of concenrn
 
 GRID_SPACING_FACTOR = 15; % grid scaling for Prakash method

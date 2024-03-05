@@ -1,11 +1,10 @@
 function volumes = nodalGridVolumes(precursorMonomerVolume, monomerVolume, ...
-    smallestParticleVolume, noNodes, gridSpacingFactor)
+    smallestParticleVolume, noNodes, gridSpacingFactor, firstParticleNode)
 
     qSpacingFactor = 10.0^(gridSpacingFactor / (noNodes - 2));
 
 	volumes(1) = precursorMonomerVolume;
-    volumes(2) = monomerVolume;
-    firstParticleNode = 3;    
+    volumes(2) = monomerVolume;  
     
     if noNodes > 2
         for i = firstParticleNode : noNodes

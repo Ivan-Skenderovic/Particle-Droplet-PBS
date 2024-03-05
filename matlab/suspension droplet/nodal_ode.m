@@ -1,9 +1,5 @@
 function dYdt = nodal_ode(t, N, gridVolumes, beta, splittingOps, reactionRate)
-%decomposition, nucleation and monodisperse coagulation
-
 noNodes = length(N);
-
-%reactionRate = 1e10;
 
 criticalClusterSize = 1; % metal oxide negligible vapor pressure
 
@@ -19,34 +15,31 @@ firstParticleNode = 3;
 kelvinVolume = gridVolumes(2); %equal to monomer
 nucleationSplit(1:noNodes) = 0;
 
-%coagulation
-    for k = firstParticleNode : noNodes
-        
-        outFlowSum = 0;
-        inFlowSum = 0;
+for k = firstParticleNode : noNodes
+    
+    outFlowSum = 0;
+    inFlowSum = 0;
 
-        %calculate nucleation split
-        if kelvinVolume < gridVolumes(firstParticleNode)
-            nucleationSplit(firstParticleNode) = kelvinVolume/gridVolumes(firstParticleNode);
-        elseif gridVolumes(k-1) <= kelvinVolume && kelvinVolume < gridVolumes(k)
-            nucleationSplit(k) = kelvinVolume/gridVolumes(k);           
-        end
-        
-        for i = firstParticleNode : noNodes 
-
-            outFlowSum = outFlowSum + beta(k,i)*N(i);
-
-            for j = firstParticleNode : k             
-               inFlowSum = inFlowSum + splittingOps(i,j,k).*beta(i,j).*...
-                    N(i)*N(j);            
-            end
-            
-        end
-        
-        dNdt(k) = nucleationRate*criticalClusterSize*nucleationSplit(k) + ...
-                  0.5*inFlowSum - N(k)*outFlowSum; 
-        
+    %calculate nucleation split
+    if kelvinVolume < gridVolumes(firstParticleNode)
+        nucleationSplit(firstParticleNode) = ...
+            kelvinVolume/gridVolumes(firstParticleNode);
+    elseif gridVolumes(k-1) <= kelvinVolume && kelvinVolume < gridVolumes(k)
+        nucleationSplit(k) = kelvinVolume/gridVolumes(k);           
     end
+    
+    for i = firstParticleNode : noNodes 
+        outFlowSum = outFlowSum + beta(k,i)*N(i);
+        for j = firstParticleNode : k      
+           inFlowSum = inFlowSum + splittingOps(i,j,k).*beta(i,j).*...
+                N(i)*N(j);            
+        end        
+    end
+    
+    dNdt(k) = nucleationRate*criticalClusterSize*nucleationSplit(k) + ...
+              0.5*inFlowSum - N(k)*outFlowSum; 
+    
+end
 
 dYdt = dNdt';
 

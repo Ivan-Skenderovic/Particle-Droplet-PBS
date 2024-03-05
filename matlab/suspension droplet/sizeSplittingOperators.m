@@ -25,7 +25,7 @@ splittingOperators = zeros(noNodes, noNodes, noNodes);
                 end
                 
                 
-            end
+           end
        end
    end
 

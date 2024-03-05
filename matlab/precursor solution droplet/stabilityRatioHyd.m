@@ -6,8 +6,15 @@ function W = stabilityRatioHyd(particleConc, gridVolumes, volFracCrit)
     % "Generalized Model for Nano- and Submicron Particle Formation in
     % Liquid Phase, Incorporating Reaction Kinetics and Hydrodynamic Interaction: 
     % Experiment, Modeling, and Simulation" 
-
+    
     volFrac = sum(particleConc(3:end).*gridVolumes(3:end));
+
+    %check if particles are present
+    if (volFrac == 0)
+        W = 1; 
+        return;
+    end
+   
     r_a = 2*(volFracCrit/volFrac)^(1/3); % dimensionless average particle 
     % center-to-center distance
     
