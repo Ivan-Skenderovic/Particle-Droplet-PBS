@@ -1,0 +1,12 @@
+Initial diameter of monodisperse particles(nm): 1
+Initial number concentration(#/m3): 1e24
+Temperature(Kelvin): 1800
+
+
+In the output, you'll get the estimated time requred for the distribution to become self preserving. Various number concentrations will be printed with time until the estimated time 
+is reached. After the code runs for the estimated time to reach SPD, the final size distribution will be printed.
+
+If you wish to run the code for a longer time, you should make the following change in line "160" of the code. Suppose you want to run the code for 1e-2 seconds and observe the size 
+distribution after that,
+
+Replace the condition: "while(t<t_SPD)" with "while(t<1e-2)"

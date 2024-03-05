@@ -1,0 +1,13 @@
+Number of nodes: 42
+Starting Temperature(Kelvin): 1800
+Cooling Rate(Kelvin/s):0
+Pressure(Atm): 1
+Molecular Weight(Kg/mol): 0.02695
+Density(Kg/m3):	1000
+Surface Tension in the form A-BT(dyne/cm): A=948 B=0.202
+Saturation Vapor Pressure of material in form Ps=exp(C-D/T)P: C=13.07 D=36373 
+Enter your choice - 1)Coagulation,2)nucleation+coagulation,3)nucleation + coagulation + surface growth,4)surface growth:1
+Choice of collision frequency function:1)Free Molecular Regime,2)Fuchs form for free molecular and transition regime:1
+Sutherland's constants for carrier gas in the form A*T^1.5/(B+T): A=1.966e-6 B=147.47
+  
+If you choose to run either "coagulation" or "surface growth" problem, you must modify the input files "coag.inp" or "grow.inp" as required.

@@ -8,10 +8,12 @@
     collRatesReg = collisionRatesReg(coagConstReg, gridVols, NONODES);
         
 % surface volume:  
-    W_ij_surf = stabilityRatioHyd(particleConc_surf, gridVols, VOLFRAC_CRIT);
+    W_ij_surf = stabilityRatioHyd(particleConc_surf, gridVols, VOLFRAC_CRIT_SURF);
     collisionRatesTotal_surf = (collRatesDiff + collRatesReg)./W_ij_surf;   
 	
-    odehandle_surf = @(t,N) nodal_ode(t, N, gridVols, collisionRatesTotal_surf, splitOps, REACTION_RATE);	
+    % odehandle_surf = @(t,N) nodal_ode(t, N, gridVols, collisionRatesTotal_surf, splitOps, REACTION_RATE);	
+	odehandle_surf = @(t,N) solvePBE(t, N, gridVols, collisionRatesTotal_surf, splitOps, REACTION_RATE);	
+	
     [~, particleConc_surf_new] = ode15s(odehandle_surf, [0 TIMESTEP], particleConc_surf, options);    
     particleConc_surf = particleConc_surf_new(end,:);
 
@@ -22,10 +24,12 @@
     end   
     
 % core volume:   
-    W_ij_core = stabilityRatioHyd(particleConc_core, gridVols, 1/19);    
+    W_ij_core = stabilityRatioHyd(particleConc_core, gridVols, VOLFRAC_CRIT_CORE);    
     collisionRatesTotal_core = (collRatesDiff)./W_ij_core;  
 
-    odehandle_core = @(t,N) nodal_ode(t, N, gridVols, collisionRatesTotal_core, splitOps, REACTION_RATE);   
+    % odehandle_core = @(t,N) nodal_ode(t, N, gridVols, collisionRatesTotal_core, splitOps, REACTION_RATE);  
+	odehandle_core = @(t,N) solvePBE(t, N, gridVols, collisionRatesTotal_core, splitOps, REACTION_RATE);	
+	
         [t, particleConc_core_new] = ode15s(odehandle_core, [0 TIMESTEP], particleConc_core, options);    
     particleConc_core = particleConc_core_new(end,:);
 

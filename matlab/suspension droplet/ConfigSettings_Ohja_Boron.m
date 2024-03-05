@@ -20,7 +20,10 @@ PARTICLE_INITIAL_MASS_FRACTION = 0.01; % dimensionless
 
 PARTICLE_INITIAL_DIAMETER = 85e-9; %m
 
-%INIT_LOGN = true; %choose to set initial psd as logn, monodisperse otherwise
+PARTICLE_SIGMA_G = 1.3;
+
+LOWER_SIZE_SCALE = 0.1; % scaling factor set to initialize smalles particle 
+% size in initPBS
 
 DROPLET_DIAMETER = 1.35e-3; %m
 
@@ -34,7 +37,9 @@ REACTION_RATE = 0; % no precursor present
 
 PARTICLE_DENSITY = 2460; %kg/m³, boron particles with oxide shell
 
-VOLFRAC_CRIT = 0.64; % 
+VOLFRAC_CRIT_SURF = 0.64; % 
+
+VOLFRAC_CRIT_CORE = 0.035; % 
 
 NONODES = 80; % number of pivot points for Prakash method
 

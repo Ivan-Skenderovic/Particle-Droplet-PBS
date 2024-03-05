@@ -20,7 +20,12 @@ PRECURSOR_CONCENTRATION = 0.0; % mol/m³
 
 PARTICLE_INITIAL_DIAMETER = 6e-9; %m
 
+PARTICLE_SIGMA_G = 1.3;
+
 DROPLET_DIAMETER = 1.79e-3; %m, calculated from 3 µl as reported by Miglani and Basu
+
+LOWER_SIZE_SCALE = 0.1; % scaling factor set to initialize smalles particle 
+% size in initPBS
 
 DROPLET_TEMPERATURE = 351.5; % K, boiling point ethanol
 
@@ -32,7 +37,9 @@ REACTION_RATE = 0;
 
 PARTICLE_DENSITY = 3900; %kg/m³, anatas phase
 
-VOLFRAC_CRIT = 0.64; % 
+VOLFRAC_CRIT_SURF = 0.64; % 
+
+VOLFRAC_CRIT_CORE = 0.035; % 
 
 NONODES = 100; % number of pivot points for Prakash method
 
