@@ -1,8 +1,8 @@
 function [particleConc_surf, massConservationErrorMerge ] = ...
     mergeInflowPSD(gridVols, r, r_new, shellWidth, shellWidth_new, conc_core, conc_surf)
    
-     particleVolumeBefore = calcTotalMassPolydisperse(gridVols, conc_core, ...
-     conc_surf, shellWidth, r);
+    particleVolumeBefore = calcTotalMassPolydisperse(gridVols, conc_core, ...
+    conc_surf, shellWidth, r);
 
     volFracs_core = conc_core.*gridVols;
    

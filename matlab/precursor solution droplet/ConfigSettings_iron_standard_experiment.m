@@ -5,7 +5,7 @@ KB = 1.380649e-23; % J/K, Boltzmann constant
 
 TIMESTEP = 1e-7; % s
 
-TIME_END = 1e-3; % s
+TIME_END = 2e-3; % s
 
 NOSPATIALGRIDPOINTS = 100; % no of discrete space nodes in finite difference
 % calculations
@@ -48,7 +48,7 @@ VOLFRAC_CRIT_SURF = 0.1625; % Peclet number is >> 1 for droplet surface
 
 VOLFRAC_CRIT_CORE = 0.035; % Peclet number is 0 for droplet core
 
-NONODES = 320; % number of nodes for Prakash method, set to 80 if 
+NONODES = 100; % number of nodes for Prakash method, set to 80 if 
 % computation time is of concenrn
 
 GRID_SPACING_FACTOR = 15; % grid scaling for Prakash method

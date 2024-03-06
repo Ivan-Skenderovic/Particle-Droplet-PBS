@@ -1,7 +1,7 @@
-function collRates = collisionRatesReg(coagConst, gridVolumes, noNodes)
+function collRates = collisionRatesReg(coagConst, gridVolumes, noNodes, ...
+    firstParticleNode)
 
 collRates = zeros(noNodes, noNodes);
-firstParticleNode = 3;
 
     for i= firstParticleNode : noNodes  
         for j = firstParticleNode : noNodes

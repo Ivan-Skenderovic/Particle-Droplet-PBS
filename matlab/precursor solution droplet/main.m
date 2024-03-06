@@ -57,7 +57,7 @@ surfaceShellWidth_new = particle_diam_surf_scale*noParticleLayers;
 
 % particle influx due to surfaceShell growth
 [particleConc_surf_new, massConsErrorMerge] = ...
-mergeInflowPSD( gridVols, dropletRadius_new, dropletRadius_new, surfaceShellWidth, ...
+mergeInflowPSD(gridVols, dropletRadius_new, dropletRadius_new, surfaceShellWidth, ...
 surfaceShellWidth_new, particleConc_core, particleConc_surf);
 
 % check mass conservation
@@ -108,7 +108,7 @@ splitOps_gasPhase = sizeSplittingOperators(gridVols, NONODES);
 coagConstDiff_fmr = (3/4/pi)^(1/6)*...
     (6*KB*TEMPERATURE_FLAME/PARTICLE_DENSITY_GAS_PHASE)^(0.5);
 collRatesDiffFMR = collisionRatesDiff_fmr(coagConstDiff_fmr, ...
-    gridVols_gasPhase, NONODES);
+    gridVols_gasPhase, NONODES, firstParticleNode);
 
 remainingSimulationTime = TIME_END - simTime;
 

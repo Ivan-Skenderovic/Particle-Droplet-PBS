@@ -4,10 +4,12 @@
     T_surf = TandRsquare(end, end-1);
     
     coagConstDiffSurface = 2*KB*T_surf/(3*LiqData.dyn_visc); 
-    collRatesDiffSurface = collisionRatesDiff(coagConstDiffSurface, gridVols, NONODES);
+    collRatesDiffSurface = collisionRatesDiff(coagConstDiffSurface, ...
+        gridVols, NONODES, firstParticleNode);
     surface_velocity = (dropletRadius - dropletRadius_new)/TIMESTEP; 
     coagConstReg = pi*surface_velocity;  
-    collRatesReg = collisionRatesReg(coagConstReg, gridVols, NONODES);
+    collRatesReg = collisionRatesReg(coagConstReg, gridVols, NONODES, ...
+        firstParticleNode);
 
     W_ij_surf = stabilityRatioHyd(particleConc_surf, gridVols, VOLFRAC_CRIT_SURF);
     collisionRatesTotal_surf = (collRatesDiffSurface + collRatesReg)./W_ij_surf;   
@@ -31,7 +33,8 @@
     T_core = volWeightedMeanTemperature(Temperatures, DropletDiameter_new);
 
     coagConstDiffCore = 2*KB*T_core/(3*LiqData.dyn_visc); 
-    collRatesDiffCore = collisionRatesDiff(coagConstDiffCore, gridVols, NONODES);
+    collRatesDiffCore = collisionRatesDiff(coagConstDiffCore, gridVols, ...
+        NONODES, firstParticleNode);
 
     W_ij_core = stabilityRatioHyd(particleConc_core, gridVols, VOLFRAC_CRIT_CORE);    
     collisionRatesTotal_core = (collRatesDiffCore)./W_ij_core;  

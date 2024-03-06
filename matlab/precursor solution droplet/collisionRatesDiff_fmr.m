@@ -1,8 +1,8 @@
-function collRates = collisionRatesDiff_fmr(coagConst, gridVolumes, noNodes)
+function collRates = collisionRatesDiff_fmr(coagConst, gridVolumes, noNodes, ...
+    firstParticleNode)
 % collision frequency function for the free molecular regime
 
 collRates = zeros(noNodes, noNodes);
-firstParticleNode = 3;
 
     for i= firstParticleNode : noNodes  
         for j = firstParticleNode : noNodes
