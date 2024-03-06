@@ -19,7 +19,7 @@ isAtLockingPoint = false;
 
 while (~isAtLockingPoint)
 
-    simTime = simTime + TIMESTEP
+    simTime = simTime + TIMESTEP;
 
     %change of droplet radius using d² Law
     r_new = 0.5*sqrt(4*r^2 - K*TIMESTEP);
