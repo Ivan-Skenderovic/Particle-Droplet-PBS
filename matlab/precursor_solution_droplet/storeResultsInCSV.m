@@ -38,5 +38,5 @@ num2str(TIMESTEP*1e6,'%2.1g'),'musec_',...
 num2str(TEMPERATURE_FLAME),'K.csv',]; 
 
 % store as csv file
-cd ../results/
+cd ../../results/
 writetable(outputToTable, results_filename); 

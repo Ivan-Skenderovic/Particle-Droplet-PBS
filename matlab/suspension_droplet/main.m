@@ -84,7 +84,7 @@ while (~isAtLockingPoint)
        num2str(K),'K.csv',];
 
        % store as csv file
-       cd ../results/
+       cd ../../results/
        writetable(outputToTable, results_filename);
 
        break
