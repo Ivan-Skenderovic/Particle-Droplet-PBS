@@ -88,8 +88,12 @@ volFrac_surf = sum(gridVols(firstParticleNode:end).*...
     if (isBreaking) 
         disp(['Breakup event. Particles are now transferred to the ' ...
             'gas phase.']);
-       
+
         transferParticlesToGasphase
+
+        % calculate total iron mole amount after breakup
+        volPerMole_feOH3 = PARTICLE_MOLAR_MASS/PARTICLE_DENSITY; % m³/mole
+        moleAmount_fe = totalParticleVolumeAfterBreakup/volPerMole_feOH3;
 
         break
     end
@@ -101,9 +105,27 @@ surfaceShellWidth = surfaceShellWidth_new;
 end
 %% END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-%% solve PBE for gas phase after droplet breakup %%%%%%%%%%%%%%%%%%%%%%%%%% 
-%particles shrink due to chemical reaction
-gridVols_gasPhase = gridVols*PARTICLE_DENSITY/PARTICLE_DENSITY_GAS_PHASE;
+%% solve PBE for gas phase after droplet breakup and account for particle % 
+%% volume change due to chemical reactions: %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% 1) precursor decomposition reaction in gas phase:
+% 2*Fe-(eha)3 + [...] -> Fe2O3 + [...] 
+% mole amount is halved:
+stoichiometry_factor = 2;
+particleConc_gas(1) = particleConc_gas(1)/stoichiometry_factor; 
+
+% 2) particle thermal decomposition in gas phase:
+% 2*Fe(OH)3 -> Fe2O3 + 3*H2O; H2O evaporates from particle
+
+M_maghemite = 159.69e-3; % kg / mole, Molar Mass
+volPerMole_maghemite = M_maghemite/PARTICLE_DENSITY_GAS_PHASE; % m³/mole
+
+reactionVolumeRatio = stoichiometry_factor*volPerMole_feOH3/...
+    volPerMole_maghemite;
+
+gridVols_gasPhase = gridVols/reactionVolumeRatio;
+gridVols_gasPhase(1:2) = volPerMole_maghemite/NA;
+
 splitOps_gasPhase = sizeSplittingOperators(gridVols, NONODES);
 coagConstDiff_fmr = (3/4/pi)^(1/6)*...
     (6*KB*TEMPERATURE_FLAME/PARTICLE_DENSITY_GAS_PHASE)^(0.5);
@@ -114,13 +136,36 @@ remainingSimulationTime = TIME_END - simTime;
 
 if (remainingSimulationTime > 0)
 
-    odehandle_gas = @(t,N) solvePBE(t, N, gridVols, collRatesDiffFMR, ...
+    odehandle_gas = @(t,N) solvePBE(t, N, gridVols_gasPhase, collRatesDiffFMR, ...
         splitOps, REACTION_RATE_FLAME, firstParticleNode);	
     [~, particleConc_gas_final] = ode15s(odehandle_gas, ...
         [0 remainingSimulationTime], ...
         particleConc_gas, options_coagulation);      
 
 end
+
+% Mole amount of Fe is conserved in the reaction, particle mass and volume
+% are not. Mole amount conservation and mass loss are checked to confirm
+% the correctness of the calculation.
+
+particleVolume_gasPhase = sum(particleConc_gas.*gridVols_gasPhase);
+moleAmount_fe_gasPhase = particleVolume_gasPhase/...
+    volPerMole_maghemite*stoichiometry_factor;
+% checkMoleAmount needs to be 1.
+checkMoleAmount = moleAmount_fe/moleAmount_fe_gasPhase;
+
+% check mass loss from evaporation of H2O
+particleMass_feOH3 = totalParticleVolumeAfterBreakup*PARTICLE_DENSITY;
+stoichiometry_factor_h2O = 3/2;
+M_h2o = 18.01528e-3; % kg / mole
+totalMass_h2O = moleAmount_fe*stoichiometry_factor_h2O*M_h2o;
+particleMass_maghemite = particleVolume_gasPhase*...
+    PARTICLE_DENSITY_GAS_PHASE;
+% checkMassLoss needs to be 1. Rounding errors from Molar masses
+% are expected.
+checkMassLoss = (particleMass_feOH3 - totalMass_h2O)/...
+    particleMass_maghemite; 
+
 %% END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 storeResultsInCSV
