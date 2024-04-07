@@ -27,6 +27,8 @@ output(5 : NONODES + 4, 4) = num2cell(gridVols_gasPhase);
 output(5 : NONODES + 4, 5) = num2cell(particleConc_gas);
 output(5 : NONODES + 4, 6) = num2cell(particleConc_gas_final(end, :));
 
+% calc dN/dlogD_p:
+
 outputToTable = cell2table(output);
 
 % set results file name

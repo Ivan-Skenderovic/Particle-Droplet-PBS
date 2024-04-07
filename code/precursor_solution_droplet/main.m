@@ -91,7 +91,8 @@ volFrac_surf = sum(gridVols(firstParticleNode:end).*...
 
         transferParticlesToGasphase
 
-        % calculate total iron mole amount after breakup
+        % calculate total iron mole amount after breakup and before
+        % decomposition reaction
         volPerMole_feOH3 = PARTICLE_MOLAR_MASS/PARTICLE_DENSITY; % m³/mole
         moleAmount_fe = totalParticleVolumeAfterBreakup/volPerMole_feOH3;
 
@@ -124,20 +125,30 @@ reactionVolumeRatio = stoichiometry_factor*volPerMole_feOH3/...
     volPerMole_maghemite;
 
 gridVols_gasPhase = gridVols/reactionVolumeRatio;
-gridVols_gasPhase(1:2) = volPerMole_maghemite/NA;
+monomerVolume_gasPhase = volPerMole_maghemite/NA;
+gridVols_gasPhase(1:2) = monomerVolume_gasPhase;
+% Prevent inclusion of particles smaller than monomer volume. In
+% the solvePBE function this is done using the nucleation split
+for i = firstParticleNode:length(gridVols_gasPhase)
+    if gridVols_gasPhase(i) < monomerVolume_gasPhase
+        newVolumeRatio = gridVols_gasPhase(i)/monomerVolume_gasPhase;
+        particleConc_gas(i) = particleConc_gas(i)*newVolumeRatio;
+        gridVols_gasPhase(i) = monomerVolume_gasPhase;
+    end
+end
 
-splitOps_gasPhase = sizeSplittingOperators(gridVols, NONODES);
+splitOps_gasPhase = sizeSplittingOperators(gridVols_gasPhase, NONODES);
 coagConstDiff_fmr = (3/4/pi)^(1/6)*...
     (6*KB*TEMPERATURE_FLAME/PARTICLE_DENSITY_GAS_PHASE)^(0.5);
 collRatesDiffFMR = collisionRatesDiff_fmr(coagConstDiff_fmr, ...
     gridVols_gasPhase, NONODES, firstParticleNode);
 
 remainingSimulationTime = TIME_END - simTime;
-
 if (remainingSimulationTime > 0)
 
     odehandle_gas = @(t,N) solvePBE(t, N, gridVols_gasPhase, collRatesDiffFMR, ...
-        splitOps, REACTION_RATE_FLAME, firstParticleNode);	
+        splitOps_gasPhase, REACTION_RATE_FLAME, firstParticleNode);	
+
     [~, particleConc_gas_final] = ode15s(odehandle_gas, ...
         [0 remainingSimulationTime], ...
         particleConc_gas, options_coagulation);      
@@ -147,8 +158,7 @@ end
 % Mole amount of Fe is conserved in the reaction, particle mass and volume
 % are not. Mole amount conservation and mass loss are checked to confirm
 % the correctness of the calculation.
-
-particleVolume_gasPhase = sum(particleConc_gas.*gridVols_gasPhase);
+particleVolume_gasPhase = sum(particleConc_gas_final(end,:).*gridVols_gasPhase);
 moleAmount_fe_gasPhase = particleVolume_gasPhase/...
     volPerMole_maghemite*stoichiometry_factor;
 % checkMoleAmount needs to be 1.
