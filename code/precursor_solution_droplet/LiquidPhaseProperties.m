@@ -21,27 +21,15 @@ classdef LiquidPhaseProperties
     methods
         function obj = LiquidPhaseProperties(compoundName)
             obj.name = compoundName;
-                       
-            if strcmp(compoundName,'Ethanol')       
-                obj.M = 0.04607;
-                obj.rho = 789;
-                obj.T_boil = 3.5152e+02;
-                obj.lambda_heat = 0.171;
-                obj.cp = 112.4/obj.M;
-                obj.L = 38560/obj.M;
-                obj.Q = 1370700/obj.M;
-                obj.nu = 0.479895;
-                obj.dyn_visc = 0.4e-3; % dynamic viscosity of solvent, Pa*s
-            end
-                     
+                                           
             if strcmp(compoundName,'2EHA') 
             % Values taken from Kunstmann et al. (2023): 
             % "Thermophysical Properties of Mixtures of 
             % 2Ethylhexanoic Acid and Ethanol" for T = 333.15 K 
             % Here, we use pure 2EHA as an approximate for a 
-            % 65:35 %vol mixture of EtOH and 2EHA, because EtOH 
-            % quickly evaporates from the droplet surface during
-            % heating
+            % mixture of 2EHA and ethanol, because EtOH quickly 
+			% evaporates from the droplet surface during
+            % combustion
 
                 obj.M = 0.144214;
                 obj.rho = 873.8; % kg/m³

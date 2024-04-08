@@ -58,7 +58,9 @@ while (~isAtLockingPoint)
     surfaceShellWidth = surfaceShellWidth_new;
 
     %terminate simulation at locking point and store results
-    if volFrac_surf >= VOLFRAC_CRIT_SURF
+    isAtLockingPoint = volFrac_surf >= VOLFRAC_CRIT_SURF;
+    
+    if isAtLockingPoint
 
        %setup results matrix
        d_d0 = 2*r/DROPLET_DIAMETER;
@@ -75,6 +77,14 @@ while (~isAtLockingPoint)
 
        outputToTable = cell2table(output);
 
+	   %%%% INFO %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	   % If number concentrations are to be plottet against particle size, 
+	   % a division by the bin width is required to obtain the probability
+	   % density function and other size distributions. See the "precursor
+	   % solution droplet" code in the file 'storeResultsInCSV.m' as an
+	   % example.
+	   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	   
+
        %set results file name
        results_filename = ...
        [num2str(PARTICLE_DENSITY,'%2.3g'),'kgm3_',...
@@ -82,12 +92,10 @@ while (~isAtLockingPoint)
        num2str(DROPLET_DIAMETER*1e6,'%2.3g'),'mu_',...
        num2str(TIMESTEP*1e6,'%2.1g'),'musec_',...
        num2str(K),'K.csv',];
-
+			
        % store as csv file
        cd ../../results/
        writetable(outputToTable, results_filename);
-
-       break
 
     end
 

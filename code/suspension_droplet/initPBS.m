@@ -24,15 +24,17 @@ smallestParticleVolume = pi/6*(PARTICLE_INITIAL_DIAMETER*LOWER_SIZE_SCALE)^3;
 
 firstParticleNode = 3;
 
-gridVols = nodalGridVolumes(precursorMonomerVolume, particleMonomerVolume, smallestParticleVolume, ...
+gridVols = nodalGridVolumes(precursorMonomerVolume, particleMonomerVolume, ...
+    smallestParticleVolume, ...
 	NONODES, GRID_SPACING_FACTOR, firstParticleNode);
 gridDiams = (6*gridVols/pi).^(1/3);
 
 particle_volume_total = particle_mass_total/PARTICLE_DENSITY;
-particleConcentrations = createLognPsd(NONODES, gridDiams, PARTICLE_INITIAL_DIAMETER, PARTICLE_SIGMA_G, [], ...
+particleConcentrations = createLognPsd(NONODES, gridDiams, ...
+    PARTICLE_INITIAL_DIAMETER, PARTICLE_SIGMA_G, [], ...
 firstParticleNode, 1e-5);
 
-%s cale to set correct particle volume
+%scale to set correct particle volume
 particle_volume_initLogn = sum(particleConcentrations.*gridVols)*droplet_volume;
 scaling = particle_volume_total/particle_volume_initLogn;
 particleConcentrations = particleConcentrations*scaling;

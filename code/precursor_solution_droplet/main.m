@@ -114,7 +114,6 @@ end
 % mole amount is halved:
 stoichiometry_factor = 2;
 particleConc_gas(1) = particleConc_gas(1)/stoichiometry_factor; 
-
 % 2) particle thermal decomposition in gas phase:
 % 2*Fe(OH)3 -> Fe2O3 + 3*H2O; H2O evaporates from particle
 
