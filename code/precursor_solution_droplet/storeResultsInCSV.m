@@ -11,7 +11,7 @@ totalParticleConcentration = sum(particleConcentrations);
 % setup results matrix
 % export particle number concentration N
 output(1, :) = {'d_break/d_0', 'surfaceShellWidth [nm]', 'time [s]', ...
-    'mean diam [nm]', 'geo. std [-]', 'N_{total} [#/m³]'};
+    'mean diam [nm]', 'geo. std [-]', 'N_total [#/m³]'};
 output(2, :) = {d_d0, shellWidth, simTime, meanDiam, geostd, ...
     totalParticleConcentration};
 output(3, 1:8) = {'particle size', ...
@@ -48,18 +48,18 @@ output(5 : noBins + 4, 7) = num2cell(binMidPoints);
 output(5 : noBins + 4, 8) = num2cell(binWeightsNormalized);
 
 %uncomment to plot a figure
-%binMidPoints_nm = binMidPoints*1e9;
-%figure
-%hold on
-%box on
-%plot(binMidPoints_nm, binWeightsNormalized, ...
+% binMidPoints_nm = binMidPoints*1e9;
+% figure
+% hold on
+% box on
+% plot(binMidPoints_nm, binWeightsNormalized, ...
 %    'Marker', 'o', 'LineStyle','-.','Color','r','MarkerFaceColor','r');
-%xlabel('Particle diameter D_P [nm]')
-%ylabel('dN/(dlogd_P*N_{total}) [-]')
-%set(gca, 'xscale', 'log')
-%set(gca, 'yscale', 'log')
-%xlim([1 1e4])
-%ylim([1e-2 1.5])
+% xlabel('Particle diameter D_P [nm]')
+% ylabel('dN/(dlogd_P*N_{total}) [-]')
+% set(gca, 'xscale', 'log')
+% set(gca, 'yscale', 'log')
+% xlim([1 1e4])
+% ylim([1e-2 1.5])
 
 outputToTable = cell2table(output);
 

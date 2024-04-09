@@ -23,7 +23,7 @@ classdef LiquidPhaseProperties
             obj.name = compoundName;
                                            
             if strcmp(compoundName,'2EHA') 
-            % Values taken from Kunstmann et al. (2023): 
+            % Some values taken from Kunstmann et al. (2023): 
             % "Thermophysical Properties of Mixtures of 
             % 2Ethylhexanoic Acid and Ethanol" for T = 333.15 K 
             % Here, we use pure 2EHA as an approximate for a 
@@ -31,13 +31,14 @@ classdef LiquidPhaseProperties
 			% evaporates from the droplet surface during
             % combustion
 
-                obj.M = 0.144214;
+                obj.M = 0.144214; % kg/mole
                 obj.rho = 873.8; % kg/m³
                 obj.T_boil = 501.2; % K
                 obj.lambda_heat = 0.133; % W/m/K 
                 obj.cp = 274/obj.M; %J/kg/K 
-                obj.L = 4.2857e5; % J/kg at 298 K
-                obj.Q = 3.3284e7; % J/kg
+                obj.L = 4.2857e5; % J/kg at 418 K, Stephenson
+                % and Malanowski, 1987
+                obj.Q = 4.8013*1e6/obj.M; % J/kg
                 obj.nu = 4.0969e-01;           
                 obj.dyn_visc = 2.413e-3; % dynamic viscosity, Pa*s
             end

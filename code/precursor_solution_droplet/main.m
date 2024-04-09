@@ -111,12 +111,12 @@ end
 
 % 1) precursor decomposition reaction in gas phase:
 % 2*Fe-(eha)3 + [...] -> Fe2O3 + [...] 
-% mole amount is halved:
+% mole amount of precursor is halved:
 stoichiometry_factor = 2;
 particleConc_gas(1) = particleConc_gas(1)/stoichiometry_factor; 
 % 2) particle thermal decomposition in gas phase:
 % 2*Fe(OH)3 -> Fe2O3 + 3*H2O; H2O evaporates from particle
-
+stoichiometry_factor_h2O = 3/2;
 M_maghemite = 159.69e-3; % kg / mole, Molar Mass
 volPerMole_maghemite = M_maghemite/PARTICLE_DENSITY_GAS_PHASE; % m³/mole
 
@@ -143,8 +143,10 @@ collRatesDiffFMR = collisionRatesDiff_fmr(coagConstDiff_fmr, ...
     gridVols_gasPhase, NONODES, firstParticleNode);
 
 remainingSimulationTime = TIME_END - simTime;
-if (remainingSimulationTime > 0)
+particleConc_gas_final = particleConc_gas;
 
+if (remainingSimulationTime > 0)
+% calculate particle growth in gas phase
     odehandle_gas = @(t,N) solvePBE(t, N, gridVols_gasPhase, collRatesDiffFMR, ...
         splitOps_gasPhase, REACTION_RATE_FLAME, firstParticleNode);	
 
@@ -152,28 +154,27 @@ if (remainingSimulationTime > 0)
         [0 remainingSimulationTime], ...
         particleConc_gas, options_coagulation);      
 
-end
+    simTime = simTime + remainingSimulationTime;
 
-% Mole amount of Fe is conserved in the reaction, particle mass and volume
-% are not. Mole amount conservation and mass loss are checked to confirm
-% the correctness of the calculation.
-particleVolume_gasPhase = sum(particleConc_gas_final(end,:).*gridVols_gasPhase);
-moleAmount_fe_gasPhase = particleVolume_gasPhase/...
+    % Mole amount of Fe is conserved in the reaction, particle mass and volume
+    % are not. Mole amount conservation and mass loss are checked to confirm
+    % the correctness of the calculation.
+    particleVolume_gasPhase = sum(particleConc_gas_final(end,:).*gridVols_gasPhase);
+    moleAmount_fe_gasPhase = particleVolume_gasPhase/...
     volPerMole_maghemite*stoichiometry_factor;
-% checkMoleAmount needs to be 1.
-checkMoleAmount = moleAmount_fe/moleAmount_fe_gasPhase;
-
-% check mass loss from evaporation of H2O
-particleMass_feOH3 = totalParticleVolumeAfterBreakup*PARTICLE_DENSITY;
-stoichiometry_factor_h2O = 3/2;
-M_h2o = 18.01528e-3; % kg / mole
-totalMass_h2O = moleAmount_fe*stoichiometry_factor_h2O*M_h2o;
-particleMass_maghemite = particleVolume_gasPhase*...
+    % checkMoleAmount needs to be 1.
+    checkMoleAmount = moleAmount_fe/moleAmount_fe_gasPhase;
+    
+    % check mass loss from evaporation of H2O
+    particleMass_feOH3 = totalParticleVolumeAfterBreakup*PARTICLE_DENSITY;
+    M_h2o = 18.01528e-3; % kg / mole
+    totalMass_h2O = moleAmount_fe*stoichiometry_factor_h2O*M_h2o;
+    particleMass_maghemite = particleVolume_gasPhase*...
     PARTICLE_DENSITY_GAS_PHASE;
-% checkMassLoss needs to be 1. Rounding errors from Molar masses
-% are expected.
-checkMassLoss = (particleMass_feOH3 - totalMass_h2O)/...
+    % checkMassLoss needs to be 1. Rounding errors are expected. 
+    checkMassLoss = (particleMass_feOH3 - totalMass_h2O)/...
     particleMass_maghemite; 
+end
 
 %% END %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 

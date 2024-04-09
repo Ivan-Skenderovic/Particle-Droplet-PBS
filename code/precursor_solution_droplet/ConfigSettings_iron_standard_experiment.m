@@ -7,7 +7,7 @@ TIMESTEP = 1e-7; % s
 
 TIME_END = 2e-3; % s
 
-NOSPATIALGRIDPOINTS = 100; % no of discrete space nodes in finite difference
+NOSPATIALGRIDPOINTS = 100; % no of discrete space points in heat transfer 
 % calculations
 
 MASS_CONSERVATION_ERROR = 1e-10; % very large particles might "flow" out of 
