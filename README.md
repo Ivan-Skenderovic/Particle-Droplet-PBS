@@ -12,5 +12,8 @@ The user is encouraged to further tailor the code to their needs. In droplet com
 are used depending on the requirements of the users. In this case, the custom models provide droplet size change and temperature data to PD-PBS. Both case 
 studies demonstrate how the interface with custom models can be implemented. 
 
- 
-
+UPDATE v2:
+-Precursor_solution_droplet now contains a detailed particle chemistry model including thermal decomposition.
+-Updated results folder with values from new calculation.
+-An example is added to demonstrate how to plot the results as probability density function
+-Minor refactoring and deleted unnecessary files.  

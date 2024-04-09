@@ -9,7 +9,7 @@ dNdt(1:noNodes) = 0;
 % is the precursor concentration. In case the user wants to
 % supply their own chemistry model, dNdt(1), dNdt(2) need to be set
 % accordingly and criticalClusterSize and nucleationRate need to be defined
-% according the chosen nucleation theory. 
+% according to the chosen nucleation theory. 
 
 dNdt(1) = -N(1)*reactionRate; 
 noMolecsInCriticalCluster = 1; 
