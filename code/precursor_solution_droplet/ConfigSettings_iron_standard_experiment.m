@@ -40,7 +40,7 @@ PARTICLE_MOLAR_MASS = 0.10687; % kg/mol, fe(OH)3
 
 PARTICLE_DENSITY = 3320; % kg/m³, fe(OH)3, bernalite
 
-PARTICLE_DENSITY_GAS_PHASE = 4860; % kg/m³, fe2O3, maghemite
+PARTICLE_DENSITY_GAS_PHASE = 5250; % kg/m³, gamma-fe2O3
 
 TEMPERATURE_CRIT = 417.15; % K, boiling point of decomposition product
 

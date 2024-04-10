@@ -20,8 +20,8 @@ function W = stabilityRatioHyd(particleConc, gridVolumes, volFracCrit)
     
     if r_a > 2 % minimum distance is 2 times average particle radius
         G_hyd = (6*(r_a - 2)^2 + 4*(r_a - 2))/(6*(r_a - 2)^2 + 13*(r_a - 2) + 2);     
-    else %touching condition
-        G_hyd = 1; 
+    else %touching condition, prevent division by zero
+        G_hyd = 1e-6; 
     end
 
     W = 1/G_hyd; % assuming no energy barrier between particles -> 

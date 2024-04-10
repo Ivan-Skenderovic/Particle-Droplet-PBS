@@ -32,9 +32,9 @@ output(5 : NONODES + 4, 5) = num2cell(particleConc_gas);
 output(5 : NONODES + 4, 6) = num2cell(particleConc_gas_final(end, :));
 
 %setup bin discretization
-noBins = 73;
-binLowerBound = log10(1e-9);
-binUpperBound = log10(1e-5);
+noBins = 60;
+binLowerBound = log10(1e-10);
+binUpperBound = log10(1e-4);
 binDiams = (6*gridVols_gasPhase(firstParticleNode:end)/pi).^(1/3);
 
 [binMidPoints, binWeights, binWidth] = normalize_psd(...
@@ -48,18 +48,18 @@ output(5 : noBins + 4, 7) = num2cell(binMidPoints);
 output(5 : noBins + 4, 8) = num2cell(binWeightsNormalized);
 
 %uncomment to plot a figure
-% binMidPoints_nm = binMidPoints*1e9;
-% figure
-% hold on
-% box on
-% plot(binMidPoints_nm, binWeightsNormalized, ...
-%    'Marker', 'o', 'LineStyle','-.','Color','r','MarkerFaceColor','r');
-% xlabel('Particle diameter D_P [nm]')
-% ylabel('dN/(dlogd_P*N_{total}) [-]')
-% set(gca, 'xscale', 'log')
-% set(gca, 'yscale', 'log')
-% xlim([1 1e4])
-% ylim([1e-2 1.5])
+binMidPoints_nm = binMidPoints*1e9;
+figure
+hold on
+box on
+plot(binMidPoints_nm, binWeightsNormalized, ...
+   'Marker', 'o', 'LineStyle','-.','Color','r','MarkerFaceColor','r');
+xlabel('Particle diameter D_P [nm]')
+ylabel('dN/(dlogd_P*N_{total}) [-]')
+set(gca, 'xscale', 'log')
+set(gca, 'yscale', 'log')
+xlim([1 1e4])
+ylim([1e-2 1.5])
 
 outputToTable = cell2table(output);
 

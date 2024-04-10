@@ -4,8 +4,8 @@ format long e;
 fclose all;
 close all;
 
-SETTINGS = 'ConfigSettings_Ohja_Boron.m';
-%SETTINGS = 'ConfigSettings_Miglani_Titania.m';
+%SETTINGS = 'ConfigSettings_Ohja_Boron.m';
+SETTINGS = 'ConfigSettings_Miglani_Titania.m';
 run(SETTINGS);
 
 options = odeset('relTol', ODEINT_REL_ERROR, 'absTol', ODEINT_ABS_ERROR);
@@ -21,11 +21,11 @@ while (~isAtLockingPoint)
 
     simTime = simTime + TIMESTEP;
 
-    %change of droplet radius using d² Law
+    % change of droplet radius using d² Law
     r_new = 0.5*sqrt(4*r^2 - K*TIMESTEP);
 
-    %particle accumulation due to surface regression
-    [particleConc_surf, massConsErrorAdvection] = ...
+    % particle influx due to droplet radius change
+    [particleConc_surf, ~, massConsErrorAdvection] = ...
          mergeInflowPSD( gridVols, r, r_new, surfaceShellWidth, surfaceShellWidth, ...
     particleConc_core, particleConc_surf );
 
@@ -33,16 +33,16 @@ while (~isAtLockingPoint)
 
     surfaceShellWidth_new = particle_diam_surf_scale;
     if surfaceShellWidth_new > r
-    %shellWidth is limited by the droplet radius
+    % shellWidth is limited by the droplet radius
         surfaceShellWidth_new = r;
     end
 
-    %particle accumulation due to grid adaptation
-    [particleConc_surf_new, massConsErrorMerge] = ...
+    % particle influx due to surfaceShell growth
+    [particleConc_surf_new, particleConc_core_new, massConsErrorMerge] = ...
          mergeInflowPSD( gridVols, r_new, r_new, surfaceShellWidth, surfaceShellWidth_new, ...
      particleConc_core, particleConc_surf);
 
-    finalParticleVolume = calcTotalMassPolydisperse(gridVols, particleConc_core, ...
+    finalParticleVolume = calcTotalMassPolydisperse(gridVols, particleConc_core_new, ...
     particleConc_surf_new, surfaceShellWidth_new, r_new);
 
     massConservationError = ...
@@ -51,18 +51,19 @@ while (~isAtLockingPoint)
         error('Mass conservation failed.')
     end
 
-    %update for next timestep
+    % update for next timestep
     r = r_new;
     volFrac_surf = sum(gridVols.*particleConc_surf);
     particleConc_surf = particleConc_surf_new;
-    surfaceShellWidth = surfaceShellWidth_new;
+    particleConc_core = particleConc_core_new;
+	surfaceShellWidth = surfaceShellWidth_new;
 
-    %terminate simulation at locking point and store results
+    % terminate simulation at locking point and store results
     isAtLockingPoint = volFrac_surf >= VOLFRAC_CRIT_SURF;
     
     if isAtLockingPoint
 
-       %setup results matrix
+       % setup results matrix
        d_d0 = 2*r/DROPLET_DIAMETER;
        shellWidth = surfaceShellWidth_new*1e9;
        output(1, :) = {'d_lock/d_0', 'surfaceShellWidth [nm]', 'time [s]'};
@@ -85,7 +86,7 @@ while (~isAtLockingPoint)
 	   % example.
 	   %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%	   
 
-       %set results file name
+       % set results file name
        results_filename = ...
        [num2str(PARTICLE_DENSITY,'%2.3g'),'kgm3_',...
        num2str(PARTICLE_INITIAL_MASS_FRACTION,'%2.3fw'),'_',...
