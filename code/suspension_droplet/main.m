@@ -4,8 +4,8 @@ format long e;
 fclose all;
 close all;
 
-%SETTINGS = 'ConfigSettings_Ohja_Boron.m';
-SETTINGS = 'ConfigSettings_Miglani_Titania.m';
+SETTINGS = 'ConfigSettings_Ohja_Boron.m';
+%SETTINGS = 'ConfigSettings_Miglani_Titania.m';
 run(SETTINGS);
 
 options = odeset('relTol', ODEINT_REL_ERROR, 'absTol', ODEINT_ABS_ERROR);
