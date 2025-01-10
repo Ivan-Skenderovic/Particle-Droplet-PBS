@@ -55,7 +55,7 @@ box on
 plot(binMidPoints_nm, binWeightsNormalized, ...
    'Marker', 'o', 'LineStyle','-.','Color','r','MarkerFaceColor','r');
 xlabel('Particle diameter D_P [nm]')
-ylabel('dN/(dlogd_P*N_{total}) [-]')
+ylabel('dN/(dlogd_P/N_{total}) [-]')
 set(gca, 'xscale', 'log')
 set(gca, 'yscale', 'log')
 xlim([1 1e4])

@@ -1,8 +1,8 @@
 clear;
 clc;
 format long e;
-close all;
-fclose all;
+%close all;
+%fclose all;
 
 run("ConfigSettings_iron_standard_experiment.m");
 
@@ -72,13 +72,27 @@ massConservationError = abs(finalParticleVolume - totalParticleVolume)/...
 
 %check for droplet events 
 isSuperheated = T_core >= TEMPERATURE_CRIT;
+
 volFrac_surf = sum(gridVols(firstParticleNode:end).*...
     particleConc_surf(firstParticleNode:end));
 
-    if (volFrac_surf >= VOLFRAC_CRIT_SURF)
-        isAtLockingPoint = true;
-        noParticleLayers = noParticleLayers + 1;
-    end
+if (volFrac_surf >= VOLFRAC_CRIT_SURF)
+    %extend for second particle layer formation
+    isAtLockingPoint = true;
+    noParticleLayers = noParticleLayers + 1; 
+
+    %% update shell width and particle flow to surface shell
+    surfaceShellWidth_new = particle_diam_surf_scale*noParticleLayers; 
+    if surfaceShellWidth_new > dropletRadius 
+    % shellWidth is limited by the droplet radius
+        surfaceShellWidth_new = dropletRadius;
+    end 
+    % particle influx due to surfaceShell growth
+    [particleConc_surf_new, particleConc_core_new, massConsErrorMerge] = ...
+    mergeInflowPSD(gridVols, dropletRadius_new, dropletRadius_new, surfaceShellWidth, ...
+    surfaceShellWidth_new, particleConc_core, particleConc_surf);
+    %%%%%%%%%%%%%%%%%%%%%
+end
 
 % choose one of the following breakup conditions:
  isBreaking = isSuperheated;
@@ -138,7 +152,7 @@ for i = firstParticleNode:length(gridVols_gasPhase)
 end
 
 splitOps_gasPhase = sizeSplittingOperators(gridVols_gasPhase, NONODES);
-coagConstDiff_fmr = (3/4/pi)^(1/6)*...
+coagConstDiff_fmr = VDW_ENH*(3/4/pi)^(1/6)*...
     (6*KB*TEMPERATURE_FLAME/PARTICLE_DENSITY_GAS_PHASE)^(0.5);
 collRatesDiffFMR = collisionRatesDiff_fmr(coagConstDiff_fmr, ...
     gridVols_gasPhase, NONODES, firstParticleNode);

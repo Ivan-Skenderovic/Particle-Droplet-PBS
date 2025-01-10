@@ -5,7 +5,7 @@ KB = 1.380649e-23; % J/K, Boltzmann constant
 
 TIMESTEP = 1e-7; % s
 
-TIME_END = 2e-3; % s
+TIME_END = 1e-3; % s
 
 NOSPATIALGRIDPOINTS = 100; % no of discrete space points in heat transfer 
 % calculations
@@ -21,7 +21,7 @@ ODEINT_ABS_ERROR_COAGULATION = 1e-2;
 
 ODEINT_REL_ERROR_COAGULATION = 1e-6;
 
-PRECURSOR_CONCENTRATION = 500; % mol/m³
+PRECURSOR_CONCENTRATION = 100; % mol/m³
 
 DROPLET_DIAMETER = 9e-6; %m
 
@@ -41,6 +41,9 @@ PARTICLE_MOLAR_MASS = 0.10687; % kg/mol, fe(OH)3
 PARTICLE_DENSITY = 3320; % kg/m³, fe(OH)3, bernalite
 
 PARTICLE_DENSITY_GAS_PHASE = 5250; % kg/m³, gamma-fe2O3
+
+VDW_ENH = 2.2; %coagulation enhancement factor due to van der Waals 
+% interaction in the gas phase
 
 TEMPERATURE_CRIT = 417.15; % K, boiling point of decomposition product
 
